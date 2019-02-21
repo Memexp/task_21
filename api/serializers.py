@@ -40,6 +40,20 @@ class RestaurantListSerializer(serializers.ModelSerializer):
             'delete',
             ]
 
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+    def create(self, validated_data):
+        my_username= validated_data['username']
+        my_password= validated_data['password']
+        new_user= User(username= my_username)
+        new_user.set_password(my_password)
+        new_user.save()
+        return validated_data
+
 
 class RestaurantDetailSerializer(serializers.ModelSerializer):
     update = serializers.HyperlinkedIdentityField(
